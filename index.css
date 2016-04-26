@@ -1,0 +1,27 @@
+body, section, div {
+    margin: 0;
+    padding: 0;
+}
+.container {
+    width: 100%;
+    background-color: lightgrey;
+}
+.container div {
+    display: inline-block;
+}
+.container .left, .container .right {
+    margin: 10px;
+    width: 45%;
+}
+.container .right {
+    position: absolute;
+    right: 15px;
+    height: 40rem;
+    overflow: scroll;
+}
+.container .right textarea {
+    font-size: 14px;
+}
+.container div textarea {
+    width: 100%;
+}
