@@ -35,7 +35,7 @@ function b() {
     for (var m = 0; m < obj.challenges.length; m++) {
         var tar = obj.challenges[m];
         for (var j = 0; j < tar.dis.length; j++) {
-            tar.dis[j] = collection[i].value;
+            tar.dis[j] = collection[i].value.replace(/(\<code\>)(\s\s)/gi, '$1&nbsp;&nbsp;').replace(/(\<br\>)(\s\s)/gi, '$1&nbsp;&nbsp;');
             i ++;
         }
     }
@@ -48,3 +48,6 @@ function b() {
 }
 // 提取tests中某项的message：
 // /(?:\'message\:)(.+)(?:\))/gi.exec("assert((function(){var testCar = new Car(3,1,2); return testCar.wheels === 3 && testCar.seats === 1 && testCar.engines === 2;})(), 'message: Calling <code>new Car(3,1,2)</code> should produce an object with a <code>wheels</code> property of <code>3</code>, a <code>seats</code> property of <code>1</code>, and an <code>engines</code> property of <code>2</code>.');")[1]
+//转义
+//"<code>  return valorAnterior - valorActual;</code>".replace(/(\<code\>)(\s\s)/gi, '$1&nbsp;&nbsp;')
+//"<br>  return valorAnterior - valorActual;</br>".replace(/(\<br\>)(\s\s)/gi, '$1&nbsp;&nbsp;')
