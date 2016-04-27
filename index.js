@@ -4,6 +4,7 @@ var str ='';
 var obj = {
     challenges: []
 };
+console.log("Flucy~v0.1.3");
 function a() {
     try {
         json = JSON.parse(source.value);
