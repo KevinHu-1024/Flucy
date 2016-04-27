@@ -41,7 +41,6 @@ function b() {
     console.log(obj);
     for (var k = 0; k < obj.challenges.length; k++) {
         json.challenges[k].description = obj.challenges[k].dis;
-        console.log(cur);
     }
     console.log(json);
     source.value = JSON.stringify(json, null, 2);
