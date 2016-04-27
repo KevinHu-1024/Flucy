@@ -5,7 +5,13 @@ var obj = {
     challenges: []
 };
 function a() {
-    json = JSON.parse(source.value);
+    try {
+        json = JSON.parse(source.value);
+    } catch (error) {
+        alert("JSON格式有误，请检查控制台错误信息");
+        console.log(error);
+        return
+    }
     for(var i = 0; i < json.challenges.length; i++) {
         var cur = json.challenges[i];
         str += "<h4 style='color:green;text-decoration:underline'>" + (i+1) + "." + cur.title +"</h4>"
@@ -34,9 +40,11 @@ function b() {
     }
     console.log(obj);
     for (var k = 0; k < obj.challenges.length; k++) {
-        var cur = obj.challenges[k];
-        json.challenges[k].description = cur;
+        json.challenges[k].description = obj.challenges[k].dis;
+        console.log(cur);
     }
     console.log(json);
     source.value = JSON.stringify(json, null, 2);
 }
+// 提取tests中某项的message：
+// /(?:\'message\:)(.+)(?:\))/gi.exec("assert((function(){var testCar = new Car(3,1,2); return testCar.wheels === 3 && testCar.seats === 1 && testCar.engines === 2;})(), 'message: Calling <code>new Car(3,1,2)</code> should produce an object with a <code>wheels</code> property of <code>3</code>, a <code>seats</code> property of <code>1</code>, and an <code>engines</code> property of <code>2</code>.');")[1]
