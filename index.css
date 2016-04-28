@@ -25,3 +25,9 @@ body, section, div {
 .container div textarea {
     width: 100%;
 }
+.mainText {
+    color: black;
+}
+.testsText {
+    color: blue;
+}

@@ -33,15 +33,28 @@ function a() {
         ti.innerHTML = (i+1) + "." + cur.title;
         frg.appendChild(ti);
         obj.challenges.push({
-            dis:[]
+            dis:[],
+            tes:[]
         })
         for (var j = 0; j < cur.description.length; j ++) {
             var tex = document.createElement('textarea');
             tex.value = cur.description[j];
+            tex.className = "mainText";
             tex.rows = 5;
             frg.appendChild(tex);
             tex = null;
             obj.challenges[i].dis.push(cur.description[j]);
+        }
+        for (var n = 0; n < cur.tests.length; n++) {
+            var tesTex = document.createElement('textarea');
+            console.log(n, cur.tests[n]);
+            tesTex.value = /(?:\'message\:)(.+)(?:\'\))/gi.exec(cur.tests[n])[1];
+            //bug: basic js中没有message字段
+            tesTex.className = "testsText";
+            tesTex.rows = 5;
+            frg.appendChild(tesTex);
+            tesTex = null;
+            obj.challenges[i].tes.push(cur.tests[n]);
         }
     }
     console.log(json);
@@ -49,21 +62,30 @@ function a() {
     translate.appendChild(frg);
 }
 function b() {
-    var collection = translate.getElementsByTagName("textarea");
+    var mainTextCollection = translate.getElementsByClassName("mainText");
+    var testsTextCollection = translate.getElementsByClassName("testsText");
     var i = 0;
+    var h = 0;
     for (var m = 0; m < obj.challenges.length; m++) {
         var tar = obj.challenges[m];
         for (var j = 0; j < tar.dis.length; j++) {
-            tar.dis[j] = collection[i].value;
+            tar.dis[j] = mainTextCollection[i].value;
             i ++;
+        }
+        for (var n = 0; n < tar.tes.length; n++) {
+            tar.tes[n] = testsTextCollection[h].value + "');";
+            h ++;
         }
     }
     console.log(obj);
     for (var k = 0; k < obj.challenges.length; k++) {
         json.challenges[k].description = obj.challenges[k].dis;
+        // json.challenges[k].tests.replace(/^/gi, obj.challenges[k].tes)//不能直接引用数组过去
+        for (var t = 0; t < obj.challenges[k].tes.length; t++) {
+            obj.challenges[k].tes[t] = /^(assert)(.+)(?:'message:)/gi.exec(json.challenges[k].tests[t])[0] + obj.challenges[k].tes[t];
+            json.challenges[k].tests[t] = obj.challenges[k].tes[t];
+        }
     }
     console.log(json);
-    source.value = JSON.stringify(json, null, 2);
+    source.value = JSON.stringify(json, null, 2) + "\n";
 }
-// 提取tests中某项的message：
-// /(?:\'message\:)(.+)(?:\))/gi.exec("assert((function(){var testCar = new Car(3,1,2); return testCar.wheels === 3 && testCar.seats === 1 && testCar.engines === 2;})(), 'message: Calling <code>new Car(3,1,2)</code> should produce an object with a <code>wheels</code> property of <code>3</code>, a <code>seats</code> property of <code>1</code>, and an <code>engines</code> property of <code>2</code>.');")[1]
