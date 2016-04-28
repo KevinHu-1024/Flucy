@@ -11,3 +11,9 @@
 - [ ] 调整页面按钮文案，避免和新功能混淆
 - [ ] 增加翻译提示功能，及语言转换选项
 - [ ] 增加description语言分支选择功能，多语言版本
+
+## 已知bug - 覆盖测试下
+
+1. basic-bonfires.json / basic-ziplines.json / front-end-development-certificate.json / gear-up-for-success.json / data-visualization-certificate.json / api-projects.json / back-end-development-certificate.json /里导出或导入错误，它的discription里面还有数组，我把它扁平化了
+2. front-end-development-certificate.json / chromedevtools.json /  bigonotation.json / computer-basics.json / dom.json / jslingo.json没用断言，用的别的，上面的有些也是这个原因
+3. basic-js.json 中后几个断言中没有message字段
