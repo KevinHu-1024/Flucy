@@ -4,11 +4,47 @@ var str ='';
 var obj = {
     challenges: []
 };
-console.log("Flucy~ v0.1.4 @KevinHu-1024");
+
+String.prototype.markdown2Html = function markdown2Html() {
+    var parten = {
+        strong: {
+            exp: /(?:\*\*)(.+?)(?:\*\*)/gi,
+            html: [" <strong>", "</strong> "]
+        },
+        code: {
+            exp: /(?:\`)(.+?)(?:\`)/gi,
+            html: [" <code>", "</code> "]
+        }
+    }
+    var result = this.toString();
+    for (currentParten in parten) {
+        if (parten.hasOwnProperty(currentParten)) {
+            result = result.replace(parten[currentParten].exp, function () {
+                console.log(arguments);
+                return parten[currentParten].html[0] + arguments[1] + parten[currentParten].html[1];
+            })
+        }
+    }
+    return result
+}
+console.log("Flucy~ v0.1.5 @KevinHu-1024");
 console.log("bug反馈地址：https://github.com/KevinHu-1024/Flucy/issues");
 console.log("本工具来自FreeCodeCamp中文社区翻译组：https://github.com/huluoyang/freecodecamp.cn/wiki");
 console.log("FreeCodeCamp中文社区:https://freecodecamp.cn");
 function a() {
+    if (translate.innerHTML != '') {
+        var con = confirm("导入时会重置右侧内容!");
+        if (!con) {
+            return
+        }
+    }
+    source.disabled = 'disabled';
+    translate.innerHTML = '';
+    json = null;
+    str ='';
+    obj = {
+        challenges: []
+    };
     try {
         json = JSON.parse(source.value);
     } catch (error) {
@@ -47,9 +83,8 @@ function a() {
         }
         for (var n = 0; n < cur.tests.length; n++) {
             var tesTex = document.createElement('textarea');
-            console.log(n, cur.tests[n]);
+            // console.log(n, cur.tests[n]);
             tesTex.value = /(?:\'message\:)(.+)(?:\'\))/gi.exec(cur.tests[n])[1];
-            //bug: basic js中没有message字段
             tesTex.className = "testsText";
             tesTex.rows = 5;
             frg.appendChild(tesTex);
@@ -62,6 +97,13 @@ function a() {
     translate.appendChild(frg);
 }
 function b() {
+    if (source.value != '') {
+        var con = confirm("导出时会重置左侧内容!");
+        if (!con) {
+            return
+        }
+    }
+    source.value = '';
     var mainTextCollection = translate.getElementsByClassName("mainText");
     var testsTextCollection = translate.getElementsByClassName("testsText");
     var i = 0;
@@ -69,18 +111,17 @@ function b() {
     for (var m = 0; m < obj.challenges.length; m++) {
         var tar = obj.challenges[m];
         for (var j = 0; j < tar.dis.length; j++) {
-            tar.dis[j] = mainTextCollection[i].value;
+            tar.dis[j] = mainTextCollection[i].value.markdown2Html();
             i ++;
         }
         for (var n = 0; n < tar.tes.length; n++) {
-            tar.tes[n] = testsTextCollection[h].value + "');";
+            tar.tes[n] = testsTextCollection[h].value.markdown2Html() + "');";
             h ++;
         }
     }
     console.log(obj);
     for (var k = 0; k < obj.challenges.length; k++) {
         json.challenges[k].description = obj.challenges[k].dis;
-        // json.challenges[k].tests.replace(/^/gi, obj.challenges[k].tes)//不能直接引用数组过去
         for (var t = 0; t < obj.challenges[k].tes.length; t++) {
             obj.challenges[k].tes[t] = /^(assert)(.+)(?:'message:)/gi.exec(json.challenges[k].tests[t])[0] + obj.challenges[k].tes[t];
             json.challenges[k].tests[t] = obj.challenges[k].tes[t];
